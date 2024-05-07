@@ -1,5 +1,5 @@
 package com.example.assignment_hard
 
-class MyAdapter {
+class MyAdapter() {
     // recyclerView Adapter
 }
