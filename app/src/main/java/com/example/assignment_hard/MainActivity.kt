@@ -13,7 +13,7 @@ import com.example.assignment_hard.data.DocumentResponse
 import com.example.assignment_hard.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ActivityDataListener {
 
     private val binding by lazy{ActivityMainBinding.inflate(layoutInflater)}
     val selectedImageList = mutableListOf<DocumentResponse>()
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onDataReceived(data: DocumentResponse) {
+    override fun onDataReceived(data: DocumentResponse) {
         Log.d("data",data.toString())
         selectedImageList.add(data)
     }

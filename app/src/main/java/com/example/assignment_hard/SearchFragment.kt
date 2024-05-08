@@ -3,7 +3,6 @@ package com.example.assignment_hard
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignment_hard.data.DocumentResponse
 import com.example.assignment_hard.databinding.FragmentSearchBinding
-import com.example.assignment_hard.databinding.ItemLayoutBinding
 import com.example.assignment_hard.network.RetrofitClient
 import kotlinx.coroutines.launch
 
@@ -28,7 +26,7 @@ class SearchFragment : Fragment() {
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     private var items = mutableListOf<DocumentResponse>()
     private var item : DocumentResponse? = null
-    private var listener: FragmentDataListener? = null
+    private var listener: ActivityDataListener? = null
 
     private val myAdapter: MyAdapter by lazy {
         MyAdapter(
@@ -37,14 +35,14 @@ class SearchFragment : Fragment() {
         )
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if(context is FragmentDataListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement FragmentDataListener")
-        }
-    }
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        if(context is FragmentDataListener) {
+//            listener = context
+//        } else {
+//            throw RuntimeException("$context must implement FragmentDataListener")
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

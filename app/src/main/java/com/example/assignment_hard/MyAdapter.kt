@@ -2,6 +2,7 @@ package com.example.assignment_hard
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,7 @@ import java.text.SimpleDateFormat
 class MyAdapter(
     private val data: MutableList<DocumentResponse>,
     private val context: Context
-):RecyclerView.Adapter<MyAdapter.ImageViewHolder>() {
+) : RecyclerView.Adapter<MyAdapter.ImageViewHolder>() {
 
 //    interface ItemClick {
 //        fun onClick(view:View, position: Int)
@@ -28,49 +29,53 @@ class MyAdapter(
 //
 //    var itemClick: ItemClick? = null
 
-    class ImageViewHolder(private var binding:ItemLayoutBinding, val context: Context):RecyclerView.ViewHolder(binding.root) {
+    class ImageViewHolder(private var binding: ItemLayoutBinding, val context: Context) :
+        RecyclerView.ViewHolder(binding.root) {
         private val ivHeart = binding.ivHeart
+        private var listener: ActivityDataListener? = null
 
         // SimpleDateFormat
         val dateFormat = "yyyy-MM-dd HH:mm:ss"
         val simpleDateFormat = SimpleDateFormat(dateFormat)
         var currentImage: DocumentResponse? = null
 
-        fun bind(image:DocumentResponse) {
+        fun bind(image: DocumentResponse) {
             Glide.with(context)
                 .load(image.thumbnailUrl)
                 .into(binding.ivPerson)
             binding.tvSitename.text = image.displaySitename
             binding.tvDatetime.text = simpleDateFormat.format(image.datetime)
             currentImage = image
-//            itemView.setOnClickListener {
-//                itemClick?.onClick(it,image)
-//            }
+
+            if(context is ActivityDataListener) {
+                listener = context
+            }
 
             itemView.setOnClickListener {
-                    currentImage.let {
-                        if (ivHeart.visibility == View.VISIBLE) {
-                            ivHeart.visibility = View.INVISIBLE
-                            it?.status = false
-                            if (it != null) {
-                                SearchFragment.newInstance(it)
-                            }
+                currentImage.let {
+                    if (ivHeart.visibility == View.VISIBLE) {
+                        ivHeart.visibility = View.INVISIBLE
+                        it?.status = false
+                        Log.d("it",it.toString())
+                        if (it != null) {
+                            listener?.onDataReceived(it)
                         }
-                        else if (ivHeart.visibility == View.INVISIBLE) {
-                            ivHeart.visibility = View.VISIBLE
-                            it?.status = true
-                            if (it != null) {
-                                SearchFragment.newInstance(it)
-                            }
+                    } else if (ivHeart.visibility == View.INVISIBLE) {
+                        ivHeart.visibility = View.VISIBLE
+                        it?.status = true
+                        Log.d("it",it.toString())
+                        if (it != null) {
+                            listener?.onDataReceived(it)
                         }
                     }
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val binding = ItemLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return ImageViewHolder(binding,context)
+        val binding = ItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ImageViewHolder(binding, context)
     }
 
     override fun getItemCount(): Int {
