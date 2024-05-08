@@ -17,8 +17,8 @@ import com.example.assignment_hard.databinding.ItemLayoutBinding
 import com.example.assignment_hard.network.RetrofitClient
 import kotlinx.coroutines.launch
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM1 = "selected_item"
+//private const val ARG_PARAM2 = "selected_true"
 
 
 class SearchFragment : Fragment() {
@@ -27,6 +27,8 @@ class SearchFragment : Fragment() {
 
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     private var items = mutableListOf<DocumentResponse>()
+    private var item : DocumentResponse? = null
+    private var listener: FragmentDataListener? = null
 
     private val myAdapter: MyAdapter by lazy {
         MyAdapter(
@@ -35,8 +37,21 @@ class SearchFragment : Fragment() {
         )
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is FragmentDataListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement FragmentDataListener")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            item = it.getParcelable(ARG_PARAM1) // adapter 로부터 데이터를 받아옴
+            item?.let { it1 -> listener?.onDataReceived(it1) }
+        }
         loadData() // onViewCreate() 위치랑 헷갈림 → 튜터님 말씀: 왠만한건 onViewCreated에 넣으면 된다! 그리고 loadData 메소드는 어디서나 불러쓸 수 있다.
     }
 
@@ -48,6 +63,11 @@ class SearchFragment : Fragment() {
             saveData(searchResult) // shared preference
             communicationNetWork(setUpImageParameter(searchResult))
         }
+//        myAdapter.itemClick = object : MyAdapter.ItemClick {
+//            override fun onClick(view: View, position: Int) {
+//                val data = items[position]
+//            }
+//        }
     }
 
     // activity를 인자로 하여 keyboard가 있는 Token 값을 찾아 내려주는 형식
@@ -78,11 +98,11 @@ class SearchFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: DocumentResponse) =
             SearchFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelable(ARG_PARAM1, param1)
+//                    putParcelable(ARG_PARAM2, param2)
                 }
             }
     }

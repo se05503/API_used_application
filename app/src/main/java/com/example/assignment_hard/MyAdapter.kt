@@ -22,32 +22,46 @@ class MyAdapter(
     private val context: Context
 ):RecyclerView.Adapter<MyAdapter.ImageViewHolder>() {
 
+//    interface ItemClick {
+//        fun onClick(view:View, position: Int)
+//    }
+//
+//    var itemClick: ItemClick? = null
+
     class ImageViewHolder(private var binding:ItemLayoutBinding, val context: Context):RecyclerView.ViewHolder(binding.root) {
         private val ivHeart = binding.ivHeart
-        private var currentImage : DocumentResponse? = null
 
         // SimpleDateFormat
         val dateFormat = "yyyy-MM-dd HH:mm:ss"
         val simpleDateFormat = SimpleDateFormat(dateFormat)
+        var currentImage: DocumentResponse? = null
 
         fun bind(image:DocumentResponse) {
-            currentImage = image
-
             Glide.with(context)
                 .load(image.thumbnailUrl)
                 .into(binding.ivPerson)
             binding.tvSitename.text = image.displaySitename
             binding.tvDatetime.text = simpleDateFormat.format(image.datetime)
+            currentImage = image
+//            itemView.setOnClickListener {
+//                itemClick?.onClick(it,image)
+//            }
 
             itemView.setOnClickListener {
                     currentImage.let {
                         if (ivHeart.visibility == View.VISIBLE) {
                             ivHeart.visibility = View.INVISIBLE
                             it?.status = false
+                            if (it != null) {
+                                SearchFragment.newInstance(it)
+                            }
                         }
                         else if (ivHeart.visibility == View.INVISIBLE) {
                             ivHeart.visibility = View.VISIBLE
                             it?.status = true
+                            if (it != null) {
+                                SearchFragment.newInstance(it)
+                            }
                         }
                     }
             }
@@ -65,5 +79,8 @@ class MyAdapter(
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.bind(data[position])
+//        holder.itemView.setOnClickListener {
+//            itemClick?.onClick(it,position)
+//        }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.assignment_hard.data
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 // API로부터 받은 응답을 저장할 클래스 정의
@@ -19,9 +21,11 @@ data class MetaResponse(
 )
 
 // 각 이미지에 대한 상세정보 → 가져오고 싶은 부분만 가져오면 된다.
+
+@Parcelize
 data class DocumentResponse(
     @SerializedName("thumbnail_url") val thumbnailUrl: String,
     @SerializedName("display_sitename") val displaySitename: String,
     @SerializedName("datetime") val datetime: Date,
     var status: Boolean = false // default 값
-)
+):Parcelable

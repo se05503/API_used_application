@@ -1,6 +1,7 @@
 package com.example.assignment_hard
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,7 +13,7 @@ import com.example.assignment_hard.data.DocumentResponse
 import com.example.assignment_hard.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),FragmentDataListener {
 
     private val binding by lazy{ActivityMainBinding.inflate(layoutInflater)}
     val selectedImageList = mutableListOf<DocumentResponse>()
@@ -46,5 +47,10 @@ class MainActivity : AppCompatActivity() {
             setReorderingAllowed(true)
             addToBackStack("")
         }
+    }
+
+    override fun onDataReceived(data: DocumentResponse) {
+        Log.d("data",data.toString())
+        selectedImageList.add(data)
     }
 }
