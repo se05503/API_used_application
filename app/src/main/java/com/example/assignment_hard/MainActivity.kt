@@ -8,12 +8,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
+import com.example.assignment_hard.data.DocumentResponse
 import com.example.assignment_hard.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy{ActivityMainBinding.inflate(layoutInflater)}
+    val selectedImageList = mutableListOf<DocumentResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

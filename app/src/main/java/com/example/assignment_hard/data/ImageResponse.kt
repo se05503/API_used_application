@@ -22,5 +22,6 @@ data class MetaResponse(
 data class DocumentResponse(
     @SerializedName("thumbnail_url") val thumbnailUrl: String,
     @SerializedName("display_sitename") val displaySitename: String,
-    @SerializedName("datetime") val datetime: Date
+    @SerializedName("datetime") val datetime: Date,
+    var status: Boolean = false // default 값
 )

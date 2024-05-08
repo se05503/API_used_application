@@ -1,6 +1,7 @@
 package com.example.assignment_hard
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,21 +16,23 @@ import java.text.SimpleDateFormat
 1. Glide의 with에 context를 받아와하는데 fragment로 잘못 설정했다. → adapter에 변수 하나 더 추가(fragment로부터 context 받아오기)
 2. Fragment 의 생명주기 이해 : OnCreate가 아닌 onViewCreated에 설정해야 한다.
  */
+
 class MyAdapter(
     private val data: MutableList<DocumentResponse>,
     private val context: Context
 ):RecyclerView.Adapter<MyAdapter.ImageViewHolder>() {
 
     class ImageViewHolder(private var binding:ItemLayoutBinding, val context: Context):RecyclerView.ViewHolder(binding.root) {
-//        private var currentImage : DocumentResponse? = null
         private val ivHeart = binding.ivHeart
+        private var currentImage : DocumentResponse? = null
 
         // SimpleDateFormat
         val dateFormat = "yyyy-MM-dd HH:mm:ss"
         val simpleDateFormat = SimpleDateFormat(dateFormat)
 
         fun bind(image:DocumentResponse) {
-//            currentImage = image
+            currentImage = image
+
             Glide.with(context)
                 .load(image.thumbnailUrl)
                 .into(binding.ivPerson)
@@ -37,10 +40,16 @@ class MyAdapter(
             binding.tvDatetime.text = simpleDateFormat.format(image.datetime)
 
             itemView.setOnClickListener {
-//                currentImage?.let {
-                    if (ivHeart.visibility == View.VISIBLE) ivHeart.visibility = View.INVISIBLE
-                    else if (ivHeart.visibility == View.INVISIBLE) ivHeart.visibility = View.VISIBLE
-//                }
+                    currentImage.let {
+                        if (ivHeart.visibility == View.VISIBLE) {
+                            ivHeart.visibility = View.INVISIBLE
+                            it?.status = false
+                        }
+                        else if (ivHeart.visibility == View.INVISIBLE) {
+                            ivHeart.visibility = View.VISIBLE
+                            it?.status = true
+                        }
+                    }
             }
         }
     }
