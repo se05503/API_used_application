@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.assignment_hard.data.DocumentResponse
 import com.example.assignment_hard.databinding.ItemLayoutBinding
+import java.text.SimpleDateFormat
 
 /*
 첫번째 오류 해결과정
@@ -18,13 +19,17 @@ class MyAdapter(private val data: MutableList<DocumentResponse>, val context: Co
     class ImageViewHolder(private var binding:ItemLayoutBinding, val context: Context):RecyclerView.ViewHolder(binding.root) {
         private var currentImage : DocumentResponse? = null
 
+        // SimpleDateFormat
+        val dateFormat = "yyyy-MM-dd HH:mm:ss"
+        val simpleDateFormat = SimpleDateFormat(dateFormat)
+
         fun bind(image:DocumentResponse) {
             currentImage = image
             Glide.with(context)
                 .load(image.thumbnailUrl)
                 .into(binding.ivPerson)
             binding.tvSitename.text = image.displaySitename
-            binding.tvDatetime.text = image.datetime.toString() // 해당 코드 변경하기
+            binding.tvDatetime.text = simpleDateFormat.format(image.datetime)
         }
     }
 
