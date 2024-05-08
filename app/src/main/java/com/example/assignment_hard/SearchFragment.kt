@@ -30,20 +30,35 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadData() // 일단 여기에 넣어봄 ㅋㅋ 근데 onViewCreate() 위치랑 헷갈림
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.searchRecyclerview.layoutManager = GridLayoutManager(requireContext(),2) // layoutManager 형태를 바꾸지 않을 경우 맨 앞에 넣어줘도 된다.
         binding.btnSearch.setOnClickListener {
-            val searchResult = binding.searchName.text.toString() // 트러블 슈팅1) 오류 해결 코드 (밖으로 빼면 안됨)
+            val searchResult = binding.etSearchName.text.toString() // 트러블 슈팅1) 오류 해결 코드 (밖으로 빼면 안됨)
+            saveData(searchResult) // shared preference
             communicationNetWork(setUpImageParameter(searchResult))
         }
     }
 
     // activity를 인자로 하여 keyboard가 있는 Token 값을 찾아 내려주는 형식
-    fun hideKeyboard(activity: Activity) {
+    private fun hideKeyboard(activity: Activity) {
         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(activity.window.decorView.applicationWindowToken,0)
+    }
+
+    // sharedPreference
+    private fun saveData(search: String) {
+        val sharedPref = requireActivity().getSharedPreferences("search_data",Context.MODE_PRIVATE)
+        val edit = sharedPref.edit()
+        edit.putString("last_search",search)
+        edit.apply()
+    }
+
+    private fun loadData() {
+        val sharedPref = requireActivity().getSharedPreferences("search_data",Context.MODE_PRIVATE)
+        binding.etSearchName.setText(sharedPref.getString("last_search",""))
     }
 
     override fun onCreateView(
