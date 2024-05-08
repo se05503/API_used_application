@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity(), ActivityDataListener {
 
     private val binding by lazy{ActivityMainBinding.inflate(layoutInflater)}
-    val selectedImageList = mutableListOf<DocumentResponse>()
+    val selectedImageList = arrayListOf<DocumentResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity(), ActivityDataListener {
                 setFragment(SearchFragment())
             }
             btnStore.setOnClickListener {
-                setFragment(StoreFragment())
+                val fragment = StoreFragment.newInstance(selectedImageList)
+                setFragment(fragment)
             }
         }
     }
@@ -51,6 +52,8 @@ class MainActivity : AppCompatActivity(), ActivityDataListener {
 
     override fun onDataReceived(data: DocumentResponse) {
         Log.d("data",data.toString())
-        selectedImageList.add(data)
+        if(!selectedImageList.contains(data)) selectedImageList.add(data)
+        Log.d("list", selectedImageList.toString())
+//        StoreFragment.newInstance(data)
     }
 }

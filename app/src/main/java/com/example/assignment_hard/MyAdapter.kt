@@ -56,14 +56,12 @@ class MyAdapter(
                     if (ivHeart.visibility == View.VISIBLE) {
                         ivHeart.visibility = View.INVISIBLE
                         it?.status = false
-                        Log.d("it",it.toString())
                         if (it != null) {
-                            listener?.onDataReceived(it)
+                            listener?.onDataReceived(it) // 나중에 position으로 바꿔야 할 것 같긴 한데..
                         }
                     } else if (ivHeart.visibility == View.INVISIBLE) {
                         ivHeart.visibility = View.VISIBLE
                         it?.status = true
-                        Log.d("it",it.toString())
                         if (it != null) {
                             listener?.onDataReceived(it)
                         }
