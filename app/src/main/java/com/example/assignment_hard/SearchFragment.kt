@@ -3,6 +3,7 @@ package com.example.assignment_hard
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,8 +45,14 @@ class SearchFragment : Fragment() {
 //        }
 //    }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d("fragment lifecycle","onAttach")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("fragment lifecycle","onCreate")
         arguments?.let {
             item = it.getParcelable(ARG_PARAM1) // adapter 로부터 데이터를 받아옴
             item?.let { it1 -> listener?.onDataReceived(it1) }
@@ -53,7 +60,16 @@ class SearchFragment : Fragment() {
         loadData() // onViewCreate() 위치랑 헷갈림 → 튜터님 말씀: 왠만한건 onViewCreated에 넣으면 된다! 그리고 loadData 메소드는 어디서나 불러쓸 수 있다.
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        Log.d("fragment lifecycle","onCreateView")
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("fragment lifecycle","onViewCreated")
         binding.searchRecyclerview.layoutManager =
             GridLayoutManager(requireContext(), 2) // layoutManager 형태를 바꾸지 않을 경우 맨 앞에 넣어줘도 된다.
         binding.btnSearch.setOnClickListener {
@@ -66,6 +82,41 @@ class SearchFragment : Fragment() {
 //                val data = items[position]
 //            }
 //        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("fragment lifecycle","onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("fragment lifecycle","onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("fragment lifecycle","onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("fragment lifecycle","onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("fragment lifecycle","onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("fragment lifecycle","onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("fragment lifecycle","onDetach")
     }
 
     // activity를 인자로 하여 keyboard가 있는 Token 값을 찾아 내려주는 형식
@@ -87,12 +138,7 @@ class SearchFragment : Fragment() {
         binding.etSearchName.setText(sharedPref.getString("last_search", ""))
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return binding.root
-    }
+
 
     companion object {
         @JvmStatic

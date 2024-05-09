@@ -18,42 +18,44 @@ class MainActivity : AppCompatActivity(), ActivityDataListener {
     private val binding by lazy{ActivityMainBinding.inflate(layoutInflater)}
     val selectedImageList = arrayListOf<DocumentResponse>()
 
+    private val searchFragment = SearchFragment() // 내가 아직 기존 객체 쓰는거랑 새로운 객체 쓰는거 잘 구별을 못하는 것 같음. 일단, 새로운 객체 생성하지 않기 위해 변수 생성
+    val storeFragment = StoreFragment.newInstance(selectedImageList) // 얘는 아마 계속 생성해야 하지 않을까?
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("MainActivity","onCreate")
         setContentView(binding.root)
 
-        setFragment(SearchFragment()) // fragment 방식을 replace 와 add 비교해서 다음엔 add 적용해보기
+        supportFragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
+            .add(R.id.frameLayout,searchFragment) // 어짜피 onCreate는 한번만 실행되니까 add 를 쓰자!
+            .commit()
 
         binding.apply {
             btnSearch.setOnClickListener {
-                setFragment(SearchFragment())
+                supportFragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .remove(storeFragment) // remove를 한 이유: 보관함 프래그먼트는 계속 업데이트 되어야 하니까 + hide를 하면 add할때 계속 프래그먼트 쌓임
+                    .show(searchFragment) // 핵심코드!
+                    .commit()
             }
+
             btnStore.setOnClickListener {
-                val fragment = StoreFragment.newInstance(selectedImageList)
-                setFragment(fragment)
+                supportFragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .hide(searchFragment)
+                    .add(R.id.frameLayout,storeFragment)
+                    .commit()
             }
         }
     }
 
-    /*
-    val fragmentManger = supportFragmentManager
-        val contactListFragment = ContactListFragment()
-        val transaction = fragmentManger.beginTransaction()
-        transaction.add(R.id.frameLayout, contactListFragment).commitAllowingStateLoss()
-     */
-
-    private fun setFragment(fragment:Fragment) {
-        supportFragmentManager.commit {
-            replace(R.id.frameLayout,fragment)
-            setReorderingAllowed(true)
-            addToBackStack("")
-        }
-    }
 
     override fun onDataReceived(data: DocumentResponse) {
         Log.d("data",data.toString())
-        if(!selectedImageList.contains(data)) selectedImageList.add(data)
+        if(!selectedImageList.contains(data)) selectedImageList.add(data) // 아이템이 중복으로 리스트에 들어가는 것을 막음
         Log.d("list", selectedImageList.toString())
-//        StoreFragment.newInstance(data)
     }
 }
