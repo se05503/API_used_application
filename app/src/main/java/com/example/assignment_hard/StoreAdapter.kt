@@ -3,6 +3,7 @@ package com.example.assignment_hard
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,12 +22,15 @@ class StoreAdapter(val items: ArrayList<DocumentResponse>, val context: Context)
         val simpleDateFormat = SimpleDateFormat(dateFormat)
 
         fun bind(item: DocumentResponse) {
+            Log.d("item",item.toString())
             if (item.status == true) {
                 Glide.with(context)
                     .load(item.thumbnailUrl)
                     .into(binding.ivPerson)
                 binding.tvSitename.text = item.displaySitename
                 binding.tvDatetime.text = simpleDateFormat.format(item.datetime)
+            } else if(item.status == false) {
+                binding.storeRecyclerview.visibility = View.GONE // 당장 문제는 해결 가능하지만, 여전히 recyclerView에 담겨있다는 문제점이 발생 (리소스 낭비)
             }
         }
     }

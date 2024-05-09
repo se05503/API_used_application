@@ -82,8 +82,5 @@ class MyAdapter(
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.bind(data[position])
-//        holder.itemView.setOnClickListener {
-//            itemClick?.onClick(it,position)
-//        }
     }
 }

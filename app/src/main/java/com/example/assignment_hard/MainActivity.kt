@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity(), ActivityDataListener {
     val selectedImageList = arrayListOf<DocumentResponse>()
 
     private val searchFragment = SearchFragment() // 내가 아직 기존 객체 쓰는거랑 새로운 객체 쓰는거 잘 구별을 못하는 것 같음. 일단, 새로운 객체 생성하지 않기 위해 변수 생성
-    val storeFragment = StoreFragment.newInstance(selectedImageList) // 얘는 아마 계속 생성해야 하지 않을까?
+//    val storeFragment = StoreFragment.newInstance(selectedImageList) // 얘는 아마 계속 생성해야 하지 않을까?
+    private val storeFragment = StoreFragment.getFragment().newInstance(selectedImageList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
