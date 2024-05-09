@@ -16,18 +16,19 @@ import java.text.SimpleDateFormat
 class StoreAdapter(val items: ArrayList<DocumentResponse>, val context: Context) :
     RecyclerView.Adapter<StoreAdapter.ViewHolder>() {
 
+    var itemClickRemove: StoreItemDeleteListener? = null
+
     class ViewHolder(val binding: StoreLayoutBinding, val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
         val dateFormat = "yyyy-MM-dd HH:mm:ss"
         val simpleDateFormat = SimpleDateFormat(dateFormat)
-        var itemClickRemove: StoreItemDeleteListener? = null
 
         fun bind(item: DocumentResponse) {
-            Log.d("item", item.toString())
-            itemView.setOnClickListener {
-                Log.d("invisible click!", "clikced")
-            }
+            Log.d("item", item.toString()) // 이 로그캣 진짜 도움 많이 됨
+//            itemView.setOnClickListener {
+//                itemClickRemove?.deleteItem()
+//            }
             Glide.with(context)
                 .load(item.thumbnailUrl)
                 .into(binding.ivPerson)
@@ -36,30 +37,14 @@ class StoreAdapter(val items: ArrayList<DocumentResponse>, val context: Context)
         }
     }
 
-    fun showDialog() {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("경고 메세지")
-        builder.setMessage("정말 이미지를 보관함에서 지우시겠습니까?")
-        builder.setIcon(R.drawable.ic_trashcan)
-
-        val listener = DialogInterface.OnClickListener { dialog, which ->
-            when (which) {
-                DialogInterface.BUTTON_POSITIVE -> {
-
-                }
-
-                DialogInterface.BUTTON_NEGATIVE -> {
-                    null
-                }
-            }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // 인터페이스 객체화
+        if(StoreFragment.getFragment() is StoreItemDeleteListener) {
+            itemClickRemove = StoreFragment.getFragment()
+        } else {
+            throw RuntimeException("must implement Interface")
         }
 
-        builder.setPositiveButton("삭제", listener)
-        builder.setNegativeButton("취소", listener)
-        builder.show()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             StoreLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, context)
@@ -70,11 +55,22 @@ class StoreAdapter(val items: ArrayList<DocumentResponse>, val context: Context)
         return items.size
     }
 
+    //    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        if(context is FragmentDataListener) {
+//            listener = context
+//        } else {
+//            throw RuntimeException("$context must implement FragmentDataListener")
+//        }
+//    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
-//        holder.itemView.setOnClickListener {
-//            itemClickRemove?.deleteItem(position) // 참고 코드에서는 view를 받긴 하는데, 안쓰는 것 같아서 일단 position만 받음
+        holder.itemView.setOnClickListener {
+            Log.d("isClicked?",position.toString())
+            // 객체화 -> null 값
+            itemClickRemove?.deleteItem(it,position) // 참고 코드에서는 view를 받긴 하는데, 안쓰는 것 같아서 일단 position만 받음
 //            notifyDataSetChanged()
-//        }
+        }
     }
 }

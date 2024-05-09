@@ -1,11 +1,13 @@
 package com.example.assignment_hard
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignment_hard.data.DocumentResponse
 import com.example.assignment_hard.databinding.FragmentStoreBinding
@@ -65,12 +67,36 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
         return binding.root
     }
 
-    override fun deleteItem(position: Int) {
-        storeImageList?.removeAt(position)
-        Log.d("deletedList",storeImageList.toString())
+    override fun deleteItem(view: View, position: Int) {
+        Log.d("isWork?","work")
+        showDialog(position)
     }
 
-//    override fun heartDetachedDeleteItem() {
-//        TODO("Not yet implemented")
-//    }
+
+
+    fun showDialog(position: Int) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("경고 메세지")
+        builder.setMessage("정말 이미지를 보관함에서 지우시겠습니까?")
+        builder.setIcon(R.drawable.ic_trashcan)
+
+        val listener = DialogInterface.OnClickListener { dialog, which ->
+            when (which) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    heartImageList?.removeAt(position)
+                    Log.d("deletedList",heartImageList.toString())
+                }
+
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    null
+                }
+            }
+        }
+
+        builder.setPositiveButton("삭제", listener)
+        builder.setNegativeButton("취소", listener)
+        builder.show()
+    }
+
+
 }

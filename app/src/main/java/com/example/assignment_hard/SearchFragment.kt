@@ -36,15 +36,6 @@ class SearchFragment : Fragment() {
         )
     }
 
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if(context is FragmentDataListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException("$context must implement FragmentDataListener")
-//        }
-//    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.d("fragment lifecycle","onAttach")
