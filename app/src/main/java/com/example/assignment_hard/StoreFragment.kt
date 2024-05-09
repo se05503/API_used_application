@@ -22,7 +22,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class StoreFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var storeImageList = arrayListOf<DocumentResponse>()
+    var storeImageList = arrayListOf<DocumentResponse>()
 //    private var param2: String? = null
     private val binding by lazy { FragmentStoreBinding.inflate(layoutInflater) }
 
