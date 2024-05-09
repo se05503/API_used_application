@@ -27,6 +27,8 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
     var storeImageList : ArrayList<DocumentResponse> ?= null
     var heartImageList : ArrayList<DocumentResponse> ?= null
 
+    private lateinit var storeAdapter: StoreAdapter
+
     companion object {
         private var INSTANCE: StoreFragment? = null
         fun getFragment(): StoreFragment {
@@ -53,10 +55,13 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
         super.onViewCreated(view, savedInstanceState)
         heartImageList = storeImageList?.filter { it.status == true } as ArrayList<DocumentResponse>
         Log.d("fragment data",storeImageList.toString())
+
         binding.storeRecyclerview.apply {
-            adapter = heartImageList?.let { StoreAdapter(it, requireContext()) }
+            storeAdapter = StoreAdapter(heartImageList!!,requireContext())
+            adapter = storeAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
+        updateData()
     }
 
     override fun onCreateView(
@@ -72,7 +77,9 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
         showDialog(position)
     }
 
-
+    private fun updateData() {
+        heartImageList?.let { storeAdapter.update(it) }
+    }
 
     fun showDialog(position: Int) {
         val builder = AlertDialog.Builder(requireContext())
@@ -83,8 +90,10 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
         val listener = DialogInterface.OnClickListener { dialog, which ->
             when (which) {
                 DialogInterface.BUTTON_POSITIVE -> {
+                    Log.d("deletedList_before",heartImageList.toString())
                     heartImageList?.removeAt(position)
-                    Log.d("deletedList",heartImageList.toString())
+                    Log.d("deletedList_after",heartImageList.toString())
+                    updateData()
                 }
 
                 DialogInterface.BUTTON_NEGATIVE -> {
