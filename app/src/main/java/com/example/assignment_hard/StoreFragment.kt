@@ -20,9 +20,10 @@ private const val ARG_PARAM2 = "param2"
  * Use the [StoreFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class StoreFragment : Fragment() {
+class StoreFragment : Fragment(),StoreItemDeleteListener {
 
     var storeImageList : ArrayList<DocumentResponse> ?= null
+    var heartImageList : ArrayList<DocumentResponse> ?= null
 
     companion object {
         private var INSTANCE: StoreFragment? = null
@@ -37,7 +38,7 @@ class StoreFragment : Fragment() {
 
     fun newInstance(param1: ArrayList<DocumentResponse>) =
         getFragment().apply {
-            storeImageList = param1
+            storeImageList = param1 // 아 데이터 갱신하는 과정이 너무 힘들게 느껴진다.. 이래서 livedata를 쓰는건가
         }
 
     private val binding by lazy { FragmentStoreBinding.inflate(layoutInflater) }
@@ -48,9 +49,10 @@ class StoreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        heartImageList = storeImageList?.filter { it.status == true } as ArrayList<DocumentResponse>
         Log.d("fragment data",storeImageList.toString())
         binding.storeRecyclerview.apply {
-            adapter = storeImageList?.let { StoreAdapter(it, requireContext()) }
+            adapter = heartImageList?.let { StoreAdapter(it, requireContext()) }
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
     }
@@ -62,4 +64,13 @@ class StoreFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
     }
+
+    override fun deleteItem(position: Int) {
+        storeImageList?.removeAt(position)
+        Log.d("deletedList",storeImageList.toString())
+    }
+
+//    override fun heartDetachedDeleteItem() {
+//        TODO("Not yet implemented")
+//    }
 }
