@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
  */
 
 class SearchAdapter(
-    private val data: MutableList<DocumentResponse>,
+    private var data: MutableList<DocumentResponse>,
     private val context: Context
 ) : RecyclerView.Adapter<SearchAdapter.ImageViewHolder>() {
 
@@ -86,6 +86,11 @@ class SearchAdapter(
 //            if (!updateItemList.contains(element)) element.status = false
 //        }
 //        notifyDataSetChanged()
+    }
+
+    fun updateItems(newItem: ArrayList<DocumentResponse>) {
+        data = newItem
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {

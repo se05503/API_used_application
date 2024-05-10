@@ -10,7 +10,7 @@ import java.util.Date
 // 전체 API 응답
 data class ImageResponse(
     @SerializedName("meta") val meta: MetaResponse,
-    @SerializedName("documents") val documents: MutableList<DocumentResponse>
+    @SerializedName("documents") val documents: ArrayList<DocumentResponse>
 )
 
 // Meta data 정보

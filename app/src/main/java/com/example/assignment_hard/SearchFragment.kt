@@ -28,7 +28,13 @@ class SearchFragment : Fragment() {
     private var items = mutableListOf<DocumentResponse>()
     private var item : DocumentResponse? = null
     private var listener: ActivityDataListener? = null
-    private var searchAdapter = SearchAdapter(items,requireContext())
+
+    private val searchAdapter: SearchAdapter by lazy {
+        SearchAdapter(
+            items,
+            requireContext()
+        )
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,6 +68,11 @@ class SearchFragment : Fragment() {
             saveData(searchResult) // shared preference
             communicationNetWork(setUpImageParameter(searchResult))
         }
+//        myAdapter.itemClick = object : MyAdapter.ItemClick {
+//            override fun onClick(view: View, position: Int) {
+//                val data = items[position]
+//            }
+//        }
     }
 
     override fun onStart() {
