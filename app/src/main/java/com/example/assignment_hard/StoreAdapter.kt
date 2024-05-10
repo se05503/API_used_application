@@ -26,9 +26,6 @@ class StoreAdapter(private var items: ArrayList<DocumentResponse>, val context: 
 
         fun bind(item: DocumentResponse) {
             Log.d("item", item.toString()) // 이 로그캣 진짜 도움 많이 됨
-//            itemView.setOnClickListener {
-//                itemClickRemove?.deleteItem()
-//            }
             Glide.with(context)
                 .load(item.thumbnailUrl)
                 .into(binding.ivPerson)
@@ -63,9 +60,9 @@ class StoreAdapter(private var items: ArrayList<DocumentResponse>, val context: 
         }
     }
 
-    fun update(newItem : ArrayList<DocumentResponse>) {
-        items = newItem
-        Log.d("newItem",items.toString())
-        notifyDataSetChanged() // 어댑터에게 데이터가 갱신되었다고 알림
+    fun update(updateItem : ArrayList<DocumentResponse>) {
+        items = updateItem
+        Log.d("updateItem",items.toString())
+        notifyDataSetChanged() // 어댑터에게 데이터가 갱신되었다고 알림 → 바로 갱신
     }
 }

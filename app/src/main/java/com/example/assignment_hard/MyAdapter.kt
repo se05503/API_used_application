@@ -23,16 +23,13 @@ class MyAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<MyAdapter.ImageViewHolder>() {
 
-//    interface ItemClick {
-//        fun onClick(view:View, position: Int)
-//    }
-//
-//    var itemClick: ItemClick? = null
+    private lateinit var imageViewHolder: ImageViewHolder
 
     class ImageViewHolder(private var binding: ItemLayoutBinding, val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         private val ivHeart = binding.ivHeart
         private var listener: ActivityDataListener? = null
+        private var heartItemList: ArrayList<DocumentResponse>?=null
 
         // SimpleDateFormat
         val dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -47,28 +44,41 @@ class MyAdapter(
             binding.tvDatetime.text = simpleDateFormat.format(image.datetime)
             currentImage = image
 
-            if(context is ActivityDataListener) {
+            if (context is ActivityDataListener) {
                 listener = context
             }
 
+
+
             itemView.setOnClickListener {
                 currentImage.let {
-                    if (ivHeart.visibility == View.VISIBLE) {
+                    if (it?.status == true) {
                         ivHeart.visibility = View.INVISIBLE
                         it?.status = false
                         if (it != null) {
+                            heartItemList?.remove(it)
                             listener?.onDataReceived(it) // 나중에 position으로 바꿔야 할 것 같긴 한데..
                         }
-                    } else if (ivHeart.visibility == View.INVISIBLE) {
+                    } else if (it?.status == false) {
                         ivHeart.visibility = View.VISIBLE
                         it?.status = true
                         if (it != null) {
+                            heartItemList?.add(it)
                             listener?.onDataReceived(it)
                         }
                     }
                 }
             }
         }
+    }
+
+    // 불리는 시점 : 보관함에서 삭제했을 때
+    fun getUpdatedData(updateItemList: ArrayList<DocumentResponse>) {
+        // heartItemList의 값을 빼버리는 것보단 heart Status를 false로 바꾸는게 낫겠지?
+//        for (element in imageViewHolder.heartItemList) {
+//            if (!updateItemList.contains(element)) element.status = false
+//        }
+//        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
