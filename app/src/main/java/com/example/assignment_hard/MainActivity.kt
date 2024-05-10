@@ -37,8 +37,7 @@ class MainActivity : AppCompatActivity(), ActivityDataListener {
                 supportFragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
-                    .remove(storeFragment) // remove를 한 이유: 보관함 프래그먼트는 계속 업데이트 되어야 하니까 + hide를 하면 add할때 계속 프래그먼트 쌓임
-                    .show(searchFragment) // 핵심코드!
+                    .replace(R.id.frameLayout,searchFragment) // searchFragment를 hide 하고 show를 하기 때문에 프래그먼트가 보여도 생명주기가 움직이지 않음?
                     .commit()
             }
 
@@ -46,8 +45,7 @@ class MainActivity : AppCompatActivity(), ActivityDataListener {
                 supportFragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
-                    .hide(searchFragment)
-                    .add(R.id.frameLayout,storeFragment)
+                    .replace(R.id.frameLayout,storeFragment)
                     .commit()
             }
         }
