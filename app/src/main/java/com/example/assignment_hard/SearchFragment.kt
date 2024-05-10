@@ -29,8 +29,8 @@ class SearchFragment : Fragment() {
     private var item : DocumentResponse? = null
     private var listener: ActivityDataListener? = null
 
-    private val myAdapter: MyAdapter by lazy {
-        MyAdapter(
+    private val searchAdapter: SearchAdapter by lazy {
+        SearchAdapter(
             items,
             requireContext()
         )
@@ -155,7 +155,7 @@ class SearchFragment : Fragment() {
     private fun communicationNetWork(param: HashMap<String, Any>) = lifecycleScope.launch {
         val responseData = RetrofitClient.searchImageRetrofit.getImage(param)
         items = responseData.documents
-        binding.searchRecyclerview.adapter = myAdapter
+        binding.searchRecyclerview.adapter = searchAdapter // 중요 코드
         hideKeyboard(requireActivity())
     }
 }

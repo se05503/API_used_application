@@ -25,7 +25,8 @@ private const val ARG_PARAM2 = "param2"
 class StoreFragment : Fragment(),StoreItemDeleteListener {
 
     var storeImageList : ArrayList<DocumentResponse> ?= null
-    var heartImageList : ArrayList<DocumentResponse> ?= null
+//    var heartImageList : ArrayList<DocumentResponse> ?= null
+    lateinit var heartImageList : ArrayList<DocumentResponse>
 
     private lateinit var storeAdapter: StoreAdapter
 
@@ -57,7 +58,7 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
         Log.d("fragment data",storeImageList.toString())
 
         binding.storeRecyclerview.apply {
-            storeAdapter = StoreAdapter(heartImageList!!,requireContext())
+            storeAdapter = StoreAdapter(heartImageList,requireContext())
             adapter = storeAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
@@ -73,7 +74,6 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
     }
 
     override fun deleteItem(view: View, position: Int) {
-        Log.d("isWork?","work")
         showDialog(position)
     }
 
@@ -91,6 +91,7 @@ class StoreFragment : Fragment(),StoreItemDeleteListener {
             when (which) {
                 DialogInterface.BUTTON_POSITIVE -> {
                     Log.d("deletedList_before",heartImageList.toString())
+                    heartImageList[position].status = false // 추가한 코드
                     heartImageList?.removeAt(position)
                     Log.d("deletedList_after",heartImageList.toString())
                     updateData()

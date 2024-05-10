@@ -1,7 +1,6 @@
 package com.example.assignment_hard
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +17,10 @@ import java.text.SimpleDateFormat
 2. Fragment 의 생명주기 이해 : OnCreate가 아닌 onViewCreated에 설정해야 한다.
  */
 
-class MyAdapter(
+class SearchAdapter(
     private val data: MutableList<DocumentResponse>,
     private val context: Context
-) : RecyclerView.Adapter<MyAdapter.ImageViewHolder>() {
+) : RecyclerView.Adapter<SearchAdapter.ImageViewHolder>() {
 
     private lateinit var imageViewHolder: ImageViewHolder
 
@@ -48,9 +47,16 @@ class MyAdapter(
                 listener = context
             }
 
-
+            // 검색 눌렀을 때 실행
+            if(image.status == false) {
+                Log.d("##","##")
+                ivHeart.visibility = View.INVISIBLE
+            } else if(image.status == true) {
+                ivHeart.visibility = View.VISIBLE // 검색 눌렀을 때 하트가 사라지는 현상 해결 코드
+            }
 
             itemView.setOnClickListener {
+                Log.d("realproblem",currentImage.toString())
                 currentImage.let {
                     if (it?.status == true) {
                         ivHeart.visibility = View.INVISIBLE
@@ -62,6 +68,7 @@ class MyAdapter(
                     } else if (it?.status == false) {
                         ivHeart.visibility = View.VISIBLE
                         it?.status = true
+                        Log.d("problem",currentImage.toString())
                         if (it != null) {
                             heartItemList?.add(it)
                             listener?.onDataReceived(it)
