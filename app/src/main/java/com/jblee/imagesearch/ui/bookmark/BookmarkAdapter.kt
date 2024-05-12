@@ -21,14 +21,14 @@ class BookmarkAdapter(var mContext: Context) : RecyclerView.Adapter<RecyclerView
     // 표시될 항목들
     var items = mutableListOf<SearchItemModel>()
 
-    // 항목 클릭 리스너 인터페이스
+    // 항목 클릭 리스너 인터페이스(어댑터 ↔ 프래그먼트)
     interface OnItemClickListener {
         fun onItemClick(item: SearchItemModel, position: Int)
     }
 
     private var clickListener: OnItemClickListener? = null
 
-    // 클릭 리스너 설정
+    // 클릭 리스너 설정 → 프래그먼트에서 어댑터 변수를 통해 접근할 수 있도록 함
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.clickListener = listener
     }
@@ -40,6 +40,7 @@ class BookmarkAdapter(var mContext: Context) : RecyclerView.Adapter<RecyclerView
     }
 
     // 항목에 데이터 바인딩
+    // onBindViewHolder 의 핵심 !! → items[position]
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         // 이미지 로딩
         Glide.with(mContext)
@@ -58,7 +59,7 @@ class BookmarkAdapter(var mContext: Context) : RecyclerView.Adapter<RecyclerView
                 "yyyy-MM-dd'T'HH:mm:ss.SSS+09:00",
                 "yyyy-MM-dd HH:mm:ss"
             )
-        // 항목 클릭 이벤트
+        // 항목 클릭 이벤트 → onBindViewHolder에서 처리하는구나
         holder.cl_item.setOnClickListener {
             Log.d("BookmarkAdapter","#jblee itemView onItemClick=${position}")
             clickListener?.onItemClick(items[position], position)

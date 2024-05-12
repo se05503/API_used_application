@@ -20,9 +20,9 @@ class BookmarkFragment : Fragment() {
     // Context와 ViewModel
     private lateinit var mContext: Context
 
-    val sharedViewModel by activityViewModels<SharedViewModel>()
+    val sharedViewModel by activityViewModels<SharedViewModel>() // 여러 Fragment에서 같은 Activity 범위의 ViewModel을 공유할 때 사용되는 선언 방식
 
-    private val viewModel: BookmarkViewModel by viewModels()
+    private val viewModel: BookmarkViewModel by viewModels() // 프래그먼트 단위 뷰모델 (프래그먼트끼리 뷰모델을 공유하지 않는 경우)
 
     // 바인딩과 어댑터
     private var binding: FragmentBookmarkBinding? = null
@@ -56,16 +56,14 @@ class BookmarkFragment : Fragment() {
         // 북마크 리스트 관찰하여 UI 업데이트
         viewModel.bookmarkedItems.observe(viewLifecycleOwner) { bookmarks ->
             adapter.items = bookmarks.toMutableList()
-            adapter.notifyDataSetChanged()
+            adapter.notifyDataSetChanged() // 북마크에서 아이템 삭제하자마자 갱신됨
         }
 
         // 항목 클릭 시 동작 정의
         adapter.setOnItemClickListener(object : BookmarkAdapter.OnItemClickListener {
             override fun onItemClick(item: SearchItemModel, position: Int) {
                 viewModel.deleteItem(mContext, item, position)
-                Log.d("BookmarkFragment", "#jblee onItemClick deleteItem position = $position")
                 sharedViewModel.addDeletedItemUrls(item.url)
-
             }
         })
 

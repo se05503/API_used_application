@@ -19,7 +19,7 @@ class BookmarkViewModel : ViewModel() {
     // 저장된 북마크 아이템들을 가져오는 함수
     fun getBookmarkedItems(context: Context) {
         // Utils 클래스를 이용해 저장된 북마크를 가져와서 _bookmarkedItems에 저장
-        _bookmarkedItems.value = Utils.getPrefBookmarkItems(context)
+        _bookmarkedItems.value = Utils.getPrefBookmarkItems(context) // 중요 코드
     }
 
     // 특정 아이템을 삭제하는 함수

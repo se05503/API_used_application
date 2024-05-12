@@ -8,7 +8,7 @@ package com.jblee.imagesearch.model
  * @param dateTime 검색된 항목의 날짜 및 시간 정보.
  * @param url 검색된 항목의 URL.
  */
-class SearchItemModel(var type: Int, var title: String, var dateTime: String, var url: String) {
+class SearchItemModel(var type: Int, var title: String, var dateTime: String, var url: String) { // A type 에서는 model을 data class로 정의했는데, 여기서는 class로 정의했네 둘이 무슨 차이일까?
 
     // 항목이 '좋아요' 상태인지 나타내는 변수. 기본값은 false.
     var isLike = false

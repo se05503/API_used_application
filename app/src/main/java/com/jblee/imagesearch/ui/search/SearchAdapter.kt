@@ -74,11 +74,11 @@ class SearchAdapter(private val mContext: Context) : RecyclerView.Adapter<Search
             val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
             val item = items[position]
 
-            if (!item.isLike) {
-                addPrefItem(mContext, item)
+            if (!item.isLike) { // 기존에 좋아요가 false 인 경우
+                addPrefItem(mContext, item) // 좋아요 클릭된 아이템 preference 에 더하기
                 item.isLike = true
-            } else {
-                deletePrefItem(mContext, item.url)
+            } else { // 기존에 좋아요가 true 인 경우
+                deletePrefItem(mContext, item.url) // 좋아요 취소하면 preference 에서 key 값으로 삭제하기
                 item.isLike = false
             }
 

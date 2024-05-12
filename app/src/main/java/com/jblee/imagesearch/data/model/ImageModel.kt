@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class ImageModel(
     @SerializedName("documents")
-    val documents: ArrayList<Documents>,
+    val documents: ArrayList<Document>,
 
     @SerializedName("meta")
     val meta: Meta
@@ -19,7 +19,7 @@ data class ImageModel(
     /**
      * 이미지 검색 응답에서 단일 문서 혹은 결과를 나타내는 클래스.
      */
-    data class Documents(
+    data class Document(
         @SerializedName("collection")
         val collection: String,
 

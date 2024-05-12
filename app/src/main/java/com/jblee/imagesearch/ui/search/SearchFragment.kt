@@ -54,6 +54,7 @@ class SearchFragment : Fragment() {
 
         setupViews(inflater, container) // 뷰 설정 메서드 호출
         setupListeners()                // 리스너 설정 메서드 호출
+
         return binding.root
     }
 
@@ -65,13 +66,14 @@ class SearchFragment : Fragment() {
 
     // ViewModel에서 데이터 변화를 관찰하는 함수
     private fun observeViewModel() {
+        // viewModel 에서 livedata 내용이 바뀌면 실행되는건가?
         viewModel.searchResults.observe(viewLifecycleOwner) { items ->
             adapter.items.addAll(items)
             adapter.notifyDataSetChanged()
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.pbSearch.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.pbSearch.visibility = if (isLoading) View.VISIBLE else View.GONE // 로딩 중이면 프로그래스바가 보이고, 로딩이 끝나면 프로그래스바를 안보이게 한다.
             loading = !isLoading
         }
 
@@ -81,15 +83,17 @@ class SearchFragment : Fragment() {
                     Log.d("SearchFragment", "#jblee sharedViewModel.deletedItemUrl url = $url")
                     val targetItem = adapter.items.find { it.url == url }
 
+                    // targetItem : SearchFragment에서 좋아요 반영을 취소해야할 아이템
                     targetItem?.let {
                         it.isLike = false
                         val itemIndex = adapter.items.indexOf(it)
-                        adapter.notifyItemChanged(itemIndex)
+                        adapter.notifyItemChanged(itemIndex) // 취소 대상이 되는 아이템의 포지션 값에 대한 데이터 갱신을 한다.
                     }
                     // 처리 후 목록을 비워줍니다.
                     sharedViewModel.clearDeletedItemUrls()
                 }
             }
+
         }
 
 
@@ -101,33 +105,36 @@ class SearchFragment : Fragment() {
         gridmanager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         binding.rvSearchResult.layoutManager = gridmanager
-        binding.fbTop.visibility = View.GONE
+        binding.fbTop.visibility = View.GONE // 초기 상태에서는 스크롤을 아래로 하지 않기 때문에 플로팅 버튼이 보이지 않음
 
         adapter = SearchAdapter(mContext)
 
         binding.rvSearchResult.adapter = adapter
-        binding.rvSearchResult.addOnScrollListener(onScrollListener)
+        binding.rvSearchResult.addOnScrollListener(onScrollListener) // ?
         binding.rvSearchResult.itemAnimator = null
         binding.etSearch.setText("")
-        binding.pbSearch.visibility = View.GONE
+        binding.pbSearch.visibility = View.GONE // 프로그래스바
     }
 
     // 리스너 설정 함수
     private fun setupListeners() {
         binding.fbTop.setOnClickListener { v: View? ->
-            binding.rvSearchResult.smoothScrollToPosition(0)
+            binding.rvSearchResult.smoothScrollToPosition(0)  // 와 내부함수가 있구나.. 대박
         }
 
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         binding.tvSearch.setOnClickListener {
             if (binding.etSearch.text.toString() == "") {
                 Toast.makeText(mContext, "검색어를 입력해 주세요.", Toast.LENGTH_SHORT).show()
             } else {
-                adapter.clearItem()
+                // 사용자가 검색어를 입력한 경우
+                adapter.clearItem() // 중요한 코드! 안그러면 다른 검색어를 입력했을 때 리사이클러뷰가 갱신이 안된다. (이전 검색 데이터 초기화)
                 lastQuery = binding.etSearch.text.toString()
                 loading = false
                 viewModel.doSearch(lastQuery, viewModel.curPageCnt)
             }
+
+            // 검색 했을 때 키보드 내리는 코드
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
         }
     }
@@ -147,7 +154,7 @@ class SearchFragment : Fragment() {
                 if (loading && visibleItemCount + pastVisibleItems >= totalItemCount) {
                     loading = false
                     viewModel.curPageCnt += 1
-                    viewModel.doSearch(lastQuery, viewModel.curPageCnt)
+                    viewModel.doSearch(lastQuery, viewModel.curPageCnt) // 페이지가 넘어갈때마다 doSearch가 불림
                 }
 
                 if (dy > 0 && binding.fbTop.visibility == View.VISIBLE) {

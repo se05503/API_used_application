@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class VideoModel(
     @SerializedName("documents")
-    var documents: ArrayList<Documents>,
+    var documents: ArrayList<Document>,
 
     @SerializedName("meta")
     var meta: Meta
@@ -15,7 +15,7 @@ data class VideoModel(
     /**
      * 비디오 검색 응답에서 단일 문서 혹은 결과를 나타내는 클래스.
      */
-    data class Documents(
+    data class Document(
         @SerializedName("title")
         var title: String,
 

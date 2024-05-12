@@ -24,6 +24,7 @@ object Utils {
      * @param toFormatformat 변경하려는 날짜/시간 문자열 형식
      * @return 변경된 형식의 날짜/시간 문자열
      */
+    // 해당 함수를 내 Document 부분에 넣어서 활용해보자! 일단 갖다 쓰기 전에 코드를 이해해보자.
     fun getDateFromTimestampWithFormat(
         timestamp: String?,
         fromFormatformat: String?,
@@ -55,7 +56,7 @@ object Utils {
         val prefs = context.getSharedPreferences("pref", Activity.MODE_PRIVATE)
         val editor = prefs.edit()
         val gson = GsonBuilder().create()
-        editor.putString(item.url, gson.toJson(item))
+        editor.putString(item.url, gson.toJson(item)) // gson 객체를 다시 json 으로 변환하면 (직렬화) string 형태로 저장 가능하다.
         editor.apply()
     }
 
@@ -79,12 +80,12 @@ object Utils {
      * @return 북마크된 아이템의 ArrayList
      */
     fun getPrefBookmarkItems(context: Context): ArrayList<SearchItemModel> {
-        val prefs = context.getSharedPreferences("pref", Activity.MODE_PRIVATE)
+        val prefs = context.getSharedPreferences("pref", Activity.MODE_PRIVATE) // 얘는 계속 매번 새로 생성해주네..
         val allEntries: Map<String, *> = prefs.all
         val bookmarkItems = ArrayList<SearchItemModel>()
         val gson = GsonBuilder().create()
         for ((key, value) in allEntries) {
-            val item = gson.fromJson(value as String, SearchItemModel::class.java)
+            val item = gson.fromJson(value as String, SearchItemModel::class.java) // 다시 json 형태에서 gson 형태로 바꾸는구나.
             bookmarkItems.add(item)
         }
         return bookmarkItems

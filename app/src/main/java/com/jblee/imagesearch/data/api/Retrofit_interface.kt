@@ -12,6 +12,7 @@ import retrofit2.http.Query
  * 이 인터페이스는 Kakao 검색 API에 대한 endpoint를 정의하며, 여기에서는 이미지 및 비디오 검색 endpoint를 사용합니다.
  */
 interface Retrofit_interface {
+    // data > model 은 API 마다 각각 정의해도, interface는 한곳에 몰아서 정의하는구나!
 
     /**
      * API endpoint for image search.

@@ -44,4 +44,18 @@
 - MVVM 중 ViewModel의 LiveData 기능 사용
 - 큰 틀: data(Model), UI(View), ViewModel → Feature 로 묶어도 된다. → 방식은 개인 성향, 프로젝트에 따라 다르다. (정답은 없다)
 - bottom navigation view 사용
+- text 를 사용하는 경우 string xml에다가 저장하는 연습을 하자.
+- 팀원할 때 코드 설명할 때 기준을 모르겠으면 "기능" 위주로 설명하기
+- 무한 스크롤 기능
+- SearchFragment 에서 좋아요 한 데이터를 preference에 저장해야 한다.
+- 역직렬화 : json 데이터 → 객체 (서버로부터 데이터를 가져올 때 보통 사용) ↔ 직렬화 : 객체 → json (sharedpreference에 객체 값을 넣기 위해 사용)
+- MainActivity.xml 에서 navigation UI 부분 코드 공부하기
+- Util 의 getDataFromTimestampWithFormat 함수 코드 이해하고 내 문서용 프로젝트에 저장하기
+- 코드 읽는 순서 
+1) SearchFragment(network 데이터 받아와서 뿌려주기) 1-1) SearchViewModel 정의 확인 → 1-2) SearchFragment의 observe 부분 확인 ※ api interface 로부터 쿼리 날려서 remote data 받아오는건 fragment 가 아닌 viewmodel 에 메서드 내에 정의하기
+2) BookmarkFragment(SearchFragment 에서 좋아요 클릭한 아이템을 BookmarkFragment 에 반영하기) → 클릭 아이템을 preference 에 저장 ↔ 보관함에서 preference 데이터 불러오기 (매개: preference)
+3) BookmarkFragment 에서의 데이터 삭제 및 SearchFragment 에서 좋아요 해제 
+   3-1) BookmarkAdapter 에서 내부 인터페이스 생성 및 onClick 이벤트에 인터페이스 사용
+   3-2) BookmarkFragment 에서 인터페이스 구현
+   3-3) sharedViewModel 
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 
 /**
  * SharedViewModel은 여러 프래그먼트나 액티비티 간에 공유된 데이터를 저장하고 관리하는 데 사용됩니다.
- * 예: 사용자가 이미지를 삭제할 경우 해당 이미지의 URL이 이 ViewModel에 저장되며,
+ * 예: 사용자가 이미지를 삭제할 경우 해당 삭제이미지의 URL이 이 ViewModel에 저장되며,
  * 이를 구독하고 있는 뷰들은 이 변화를 반영할 수 있습니다.
  */
 class SharedViewModel : ViewModel() {
